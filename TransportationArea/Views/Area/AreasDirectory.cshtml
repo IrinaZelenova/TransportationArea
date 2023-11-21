@@ -1,0 +1,71 @@
+﻿@model TransportationArea.Models.GridAreasModel
+@{
+    ViewData["Title"] = "LoadingPointsDirectory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Справочник зон
+    <a class="btn btn-link" href="CreateArea" role="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+    </a>
+</h1>
+<table class="table no-border">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Зона</th>
+            <th>Стоимость провоза</th>
+            <th>Города зоны</th>
+            <th>Соседство</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var area in Model.areas)
+        {
+
+            <tr>
+                
+                     <td>
+                        @area.Id
+                    </td>
+                    <td>
+                     <a href="ChangeArea?Id=@area.Id"> @area.Name </a>
+                    </td>
+                    <td>
+                      @area.Price
+                    </td>
+               
+                <td>
+                    @foreach (var loadingPoints in Model.loadingPoints.Where(x=>x.Area==area).ToList())
+                    {
+                        <br />
+
+                        <a href="/LoadingPoints/ChangeLoadingPoint?id=@loadingPoints.Id" role="button">@loadingPoints.Name</a>
+                    }
+                </td>
+                <td>
+                    @foreach (var grid in Model.gridAreas.Where(x=>x.Area1==area).ToList())
+                    {
+                        <br /> @grid.Area2.Name
+
+                        <a class="btn btn-outline-secondary" href="DeleteGridOfArea?gridId=@grid.Id" role="button">Удалить</a>
+                    }
+                    @foreach (var grid in Model.gridAreas.Where(x => x.Area2 == area).ToList())
+                    {
+                        <br /> @grid.Area1.Name
+                        <a class="btn btn-outline-secondary" href="DeleteGridOfArea?gridId=@grid.Id" role="button">Удалить</a>
+                    }
+                   
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" href="AddGridOfArea?areaId=@area.Id" role="button">Добавить соседа</a>
+                </td>
+            </tr>
+        }
+
+
+    </tbody></table>

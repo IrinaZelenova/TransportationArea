@@ -1,0 +1,26 @@
+﻿@model TransportationArea.Models.GridAreaModel
+@{
+    ViewData["Title"] = "CreateCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Добавим соседство зон</h1>
+<form asp-controller="Area" method="post" asp-action="AddGridOfArea">
+   <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="input-group ">
+                <label class="input-group-text">Зона1:</label>
+                <select asp-for="@Model.area1.Id" id="areaId1" asp-items="@(new SelectList(Model.areas,"Id","Name",Model.areaSelect))" class="form-control required"></select>
+            </div>
+        </div>
+        <div class="col-md-5 mb-4">
+            <div class="input-group ">
+                <label class="input-group-text">Зона2:</label>
+                <select asp-for="@Model.area2.Id" asp-items="@(new SelectList(Model.areas,"Id","Name"))" class="form-control required"></select>
+            </div>
+        </div>
+
+
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+</form>

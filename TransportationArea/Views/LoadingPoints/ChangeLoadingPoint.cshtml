@@ -1,0 +1,36 @@
+﻿@model TransportationArea.Models.LoadingPointModel
+@{
+    ViewData["Title"] = "CreateCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Редактирование Карточки Города</h1>
+<form asp-controller="LoadingPoints" method="post" asp-action="ChangeLoadingPoint" asp-route-id="@Model.Id">
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="input-group">
+                <label asp-for="Name" class="input-group-text"></label>
+                <input asp-for="Name" type="text" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="input-group ">
+                <label asp-for="Area.Name" class="input-group-text"></label>
+                <select asp-for="Area.Id" asp-items="@(new SelectList(Model.areas,"Id","Name",Model.Area.Id))" class="form-control required"></select>
+            </div>
+        </div>
+        <div class="col-md-1 mb-1">
+            <a class="btn btn-link" href="~/Order/CreateArea" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                </svg>
+            </a>
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+</form>
+

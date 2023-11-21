@@ -1,0 +1,67 @@
+﻿@model TransportationArea.Models.OrdersModel
+@{
+    ViewData["Title"] = "OrdersDirectory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<
+<h1 class="text-center">Список заказов
+    <a class="btn btn-link" href="Order/CreateOrder" role="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+    </a>
+</h1>
+@* <a class="btn btn-outline-primary" href="Order/CreateOrder" role="button">Создать заказ</a> *@
+<table class="table no-border">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Город Отправления</th>
+            <th>Город Получения</th>
+            <th>Масса<br />(в тоннах)</th>
+            <th>Дата отгрузки</th>
+            <th>Стоимость перевозки</th>
+            <th>Статус</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var order in Model.OrdersRepository)
+        {
+            
+            <tr> 
+                <td>
+                    @order.Order.Id
+                </td>
+                <td>
+                    @order.Order.SendSity.Name
+                </td>
+                <td>
+                    @order.Order.ReceivedSity.Name
+                </td>
+                <td>
+                    @order.Order.Mass
+                </td>
+                <td>
+                    @order.Order.LoadingDate.ToString("dd.MM.yyyy")
+                </td>
+                <td>
+                    @order.Order.Price
+                </td>
+                <td>
+                    @order.GetStatusName()
+                   <h6 class="text-muted">(@order.Start.ToString("dd.MM.yyyy"))</h6>
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary" href="Order/OrderCard?Id=@order.Order.Id" role="button">Карточка заказа</a>
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+

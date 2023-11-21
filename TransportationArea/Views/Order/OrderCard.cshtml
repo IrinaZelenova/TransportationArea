@@ -1,0 +1,124 @@
+﻿@using TransportationArea.DBProviderService.Data;
+@model TransportationArea.Models.OrderCardModel
+@{
+    ViewData["Title"] = "Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Заказ № @Model.Order.Id 
+@if (@Model.OrderStatus.Where(x => x.Active).First().GetNextCommand() != null)
+{
+    <a class="btn btn-outline-primary" href="Distributor?orderId=@Model.Order.Id&Status=@Model.OrderStatus.Where(x=>x.Active).Select(x=>x.Status).First()" role="button">@Model.OrderStatus.Where(x=>x.Active).First().GetNextCommand()</a>
+}
+</h1> 
+<div class="row">
+    <div class="col">
+        <div class="input-group ">
+            <label asp-for="Order.Name" class="input-group-text"></label>
+            <input asp-for="Order.Name" type="text" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="input-group ">
+            <label asp-for="Order.Mass" class="input-group-text"></label>
+            <input asp-for="Order.Mass" type="number" class="form-control" readonly>
+        </div>
+
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        <div class="input-group ">
+            <label asp-for="Order.SendSity" class="input-group-text"></label>
+            <input asp-for="Order.SendSity.Name" class="form-control" readonly></input>
+        </div>
+    </div>
+    <div class="col">
+        <div class="input-group ">
+            <label class="input-group-text">Город получателя:</label>
+            <input asp-for="Order.ReceivedSity.Name" class="form-control" readonly></input>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        <div class="input-group ">
+            <label class="input-group-text">Адрес отправителя:</label>
+            <input asp-for="Order.SendAddress" type="text" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="col">
+        <div class="input-group ">
+            <label class="input-group-text">Адрес получателя:</label>
+            <input asp-for="Order.ReceivedAddress" type="text" class="form-control" readonly>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-6">
+        <div class="input-group ">
+            <label asp-for="Order.LoadingDate" class="input-group-text"></label>
+            <input value="@Model.Order.LoadingDate.ToString("dd.MM.yyyy")" readonly class=" form-control">
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group ">
+            <label class="input-group-text">Актуальный статус:</label>
+            <input value="@Model.OrderStatus.Where(x=>x.Active).Select(x=>x.GetStatusName()).First()" readonly class=" form-control">
+        </div>
+    </div>
+</div>
+<br />
+<h3>История:</h3>
+<table class="table no-border">
+    <thead>
+        <tr>
+            <th>Статус</th>
+            <th>Дата начала</th>
+            <th>Дата окончания</th>
+            <th>Дополнительная информация</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var status in Model.OrderStatus)
+        {
+
+            <tr>
+                <td>     
+                    @status.GetStatusName()
+                </td>
+                <td>
+                    @status.Start.ToString("dd.MM.yyyy")
+                </td>
+                <td>
+                    @if (!@status.Active)
+                        @status.End.ToString("dd.MM.yyyy")
+                </td>
+                 <td>
+                    @if (status.Status == OrderStatusName.AssignCarsAndRoute)
+                    {
+                        foreach(var route in Model.Order.orderRoute.route)
+                        {
+                            @route.Name<br />
+                        }
+                        foreach (var car in Model.CarRoutes)
+                        {
+                           @car.Car.Number 
+                           @car.Mass
+                           <br />
+                        }
+                    }
+
+                   
+                                       
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

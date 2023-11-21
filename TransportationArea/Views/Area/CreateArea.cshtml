@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "CreateArea";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Создание Зоны</h1>
+<form asp-controller="Area" asp-action="CreateArea">
+    <div class="row form-group">
+        <div class="col-md-4 mb-3">
+            <label>
+                @ViewData["Message"]
+            </label>
+            <div class="input-group">
+                <label class="input-group-text">Название:</label>
+                <input type="text" class="form-control" name="Name" id="Name" placeholder="Введите имя зоны">
+            </div>
+            <div class="input-group">
+                <label class="input-group-text">Цена перехода по зоне :</label>
+                <input data-prefix="P" type="number" value="0.00" data-decimals="2" min="0" step="0.01" class="form-control" name="Price">
+            </div>
+            <br />
+            <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+        </div>
+        <div class="col-md-6 mb-5">
+            <div id="map" style="width: 100%; height:400px"></div>
+        </div>
+    </div>
+
+</form>
+
+
+@section Scripts{
+    <script src="https://api-maps.yandex.ru/v3/?apikey=fe2b6ee6-f09e-48ef-8956-6ffa516df0bf&lang=ru_RU"></script>
+    <script src="~/js/MapZona.js"></script>
+
+
+}
+
+

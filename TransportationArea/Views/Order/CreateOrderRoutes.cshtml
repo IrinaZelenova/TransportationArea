@@ -1,0 +1,143 @@
+﻿@using TransportationArea.DBProviderService.Data;
+@model TransportationArea.Models.OrderModel
+
+@{
+    ViewData["Title"] = "CreateOrderRoutes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Заказ №@Model.Order.Id  выбор маршрута </h1>
+ <div class="row">
+        <div class="col">
+            <div class="input-group ">
+                <label asp-for="Order.Name" class="input-group-text"></label>
+                <input asp-for="Order.Name" type="text" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="col">
+            <div class="input-group ">
+                <label asp-for="Order.Mass" class="input-group-text"></label>
+                <input asp-for="Order.Mass" type="number" class="form-control" readonly>
+            </div>
+
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <div class="input-group ">
+                <label asp-for="Order.SendSity" class="input-group-text"></label>
+                <input asp-for="Order.SendSity.Name" class="form-control" readonly></input>
+            </div>
+        </div>
+        <div class="col">
+            <div class="input-group ">
+                <label class="input-group-text">Город получателя:</label>
+                <input asp-for="Order.ReceivedSity.Name" class="form-control" readonly></input>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <div class="input-group ">
+                <label class="input-group-text">Адрес отправителя:</label>
+                <input asp-for="Order.SendAddress" type="text" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="col">
+            <div class="input-group ">
+                <label class="input-group-text">Адрес получателя:</label>
+                <input asp-for="Order.ReceivedAddress" type="text" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-6">
+            <div class="input-group ">
+                <label asp-for="Order.LoadingDate" class="input-group-text"></label>
+            <input value="@Model.Order.LoadingDate.ToString("dd.MM.yyyy")" readonly class=" form-control">
+            </div>
+        </div>
+    </div>
+    <br />
+   <h3>Свободные авто: </h3>
+@if (Model.freeCar.Sum(x => x.Capacity) >= Model.Order.Mass)
+{
+    <p class="text-success">количество свободных авто достаточно для перевозки груза</p>
+}
+else
+{
+    <p class="text-danger">количества свободных авто не достаточно для перевозки груза</p>
+}
+<table class="table no-border">
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Вместимость<br />тонн</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var car in Model.freeCar)
+        {
+
+            <tr>
+               
+                <td>
+                   @car.Number
+                </td>
+                <td>
+                  @car.Capacity
+                </td>
+               
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+    <h3>Выберите маршрут: </h3>
+<br />
+
+    <table class="table no-border">
+        <thead>
+            <tr>
+                <th>Зоны</th>
+                <th>Стоимость перевозки</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            @foreach (var route in Model.Routes)
+            {
+
+            <tr>
+                <td>
+                    @foreach (var area in route)
+                    {
+                        @area.Name
+
+                        <br />
+                    }
+                </td>
+                    <td>
+                        @route.Sum(x=>x.Price)
+                    </td>
+                    <td>
+                    @* <a href="SaveRouteOrder?IdOrder=@Model.Order.Id&Route=@route" role="button">Выбрать</a> *@
+                    @Html.ActionLink("Выбрать", "SaveRouteOrder", "Order", new { IdOrder = @Model.Order.Id,Route=route.Select(x=>x.Id).ToList(),Cars=Model.freeCar.Select(x=>x.Id).ToList()})
+
+                </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+ 
+
+

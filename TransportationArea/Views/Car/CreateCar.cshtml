@@ -1,0 +1,26 @@
+﻿@model TransportationArea.DBProviderService.Data.Car
+@{
+    ViewData["Title"] = "CreateCar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Создание авто</h1>
+<form asp-controller="Car" asp-action="CreateCar">
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="input-group">
+                <label asp-for="Number" class="input-group-text"></label>
+                <input asp-for="Number" type="text" ma class="form-control" placeholder="Введите номер авто">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="input-group ">
+                <label asp-for="Capacity" class="input-group-text"></label>
+                <input asp-for="Capacity" type="number" value="0.00" data-decimals="2" min="0" step="0.01" class="form-control"></input>
+            </div>
+        </div>
+            </div>
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+</form>

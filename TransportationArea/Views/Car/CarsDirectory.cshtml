@@ -1,0 +1,46 @@
+﻿@model List<TransportationArea.DBProviderService.Data.Car>
+@{
+    ViewData["Title"] = "LoadingPointsDirectory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">Справочник авто 
+    <a class="btn btn-link" href="CreateCar" role="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+    </a>
+</h1>
+@* <a class="btn btn-outline-primary" href="CreateCar" role="button">Добавить авто</a> *@
+<table class="table no-border">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Номер автомобиля</th>
+            <th>Грузоподъемность(тонн)</th>
+         </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var car in Model)
+        {
+
+            <tr>
+                <td>
+                    @car.Id
+                </td>
+                <td>
+                   <a href="EditCar?id=@car.Id"> @car.Number</a>
+                </td>
+                <td>
+                    @car.Capacity
+                </td>
+             </tr>
+        }
+
+
+    </tbody>
+</table>
+
+
