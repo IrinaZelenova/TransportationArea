@@ -100,9 +100,9 @@ namespace TransportationArea.Controllers
         }
 
         
-        public IActionResult Distributor(int orderId, OrderStatusName Status)
+        public IActionResult Distributor(int orderId, OrderStatusName status)
         {
-            switch (Status)
+            switch (status)
             {
                 case OrderStatusName.New: return RedirectToAction("CreateOrderRoutes", new { IdOrder=orderId });
                 case OrderStatusName.AssignCarsAndRoute: return RedirectToAction("AcceptOnTheWay", new { IdOrder = orderId });

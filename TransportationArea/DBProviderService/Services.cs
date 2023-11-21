@@ -106,6 +106,7 @@ namespace TransportationArea.DBProviderService
             var activeStatus = GetOrderStatus(IdOrder).Result.Where(x => x.Active).First();
             activeStatus.End = DateTime.Now;
             activeStatus.Active = false;
+            _datebase.SaveChanges();
 
             OrderStatus orderStatus = new OrderStatus()
             {
@@ -114,14 +115,21 @@ namespace TransportationArea.DBProviderService
                 Start = DateTime.Now,
                 Active = true
             };
-            if (orderStatusName == OrderStatusName.Finished)
+            if (orderStatusName == OrderStatusName.OnTheWay)
             {
+                ChangeCarsStatus(IdOrder, CarRouteStatusName.New, CarRouteStatusName.OnTheWay);
                 orderStatus.End = DateTime.Now;
             }
-           
+            if (orderStatusName == OrderStatusName.Finished)
+            {
+                ChangeCarsStatus(IdOrder, CarRouteStatusName.OnTheWay, CarRouteStatusName.Finished);
+                orderStatus.End = DateTime.Now;
+            }
+            
             _datebase.OrdersStatus.Add(orderStatus);
             _datebase.SaveChanges();
         }
+
 
         public void AddNewCarRouteStatusName(int IdOrder, CarRouteStatusName carStatus) 
         {
@@ -129,6 +137,20 @@ namespace TransportationArea.DBProviderService
             foreach(var car in cars)
             {
                 car.Status = carStatus;
+            }
+            _datebase.SaveChanges();
+        }
+
+        public void ChangeCarsStatus(int OrderId, CarRouteStatusName oldStatusName, CarRouteStatusName newStatusName)
+        {
+            var carRoutes = GetCarRoutes(OrderId).Result.Where(x => x.Status == oldStatusName).ToList();//TODO добавить интерфейс погрузки и роли
+            foreach(var car in carRoutes)
+            {                
+                car.Status= newStatusName;
+                if (newStatusName== CarRouteStatusName.Finished)
+                {
+                    car.End = DateTime.Now;
+                }
             }
             _datebase.SaveChanges();
         }
@@ -279,7 +301,7 @@ namespace TransportationArea.DBProviderService
                           .Include(x => x.Order)
                           .ThenInclude(x => x.ReceivedSity)
                           .Where(x=>x.Active)
-                          .OrderBy(x => x.Order.Id)
+                          .OrderByDescending(x => x.Order.Id)
                           .ToListAsync();
 
         }
@@ -373,10 +395,11 @@ namespace TransportationArea.DBProviderService
 
         public List<Car> GetFreeCars(int IdOrder)
         {
-            Order order = GetOrder(IdOrder);
+           Order order = GetOrder(IdOrder);
            var BusyCars=_datebase.CarRoutes
                          .Include(x=>x.Car)
-                         .Where(x=>x.Status< CarRouteStatusName.Finished || x.End>order.LoadingDate || (x.End != order.LoadingDate && x.ReceivedSity!=order.ReceivedSity))
+                         //.Where(x=>x.Status< CarRouteStatusName.Finished || x.End>order.LoadingDate || (x.End != order.LoadingDate && x.ReceivedSity!=order.ReceivedSity))
+                         .Where(x => x.Status < CarRouteStatusName.Finished)
                          .Select(x=>x.Car).Distinct().ToList();
             if (BusyCars.Count == 0) return _datebase.Cars.ToList();
              return _datebase.Cars.Except(BusyCars).ToList();   

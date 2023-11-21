@@ -4,13 +4,7 @@
     ViewData["Title"] = "Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h1>Заказ № @Model.Order.Id 
-@if (@Model.OrderStatus.Where(x => x.Active).First().GetNextCommand() != null)
-{
-    <a class="btn btn-outline-primary" href="Distributor?orderId=@Model.Order.Id&Status=@Model.OrderStatus.Where(x=>x.Active).Select(x=>x.Status).First()" role="button">@Model.OrderStatus.Where(x=>x.Active).First().GetNextCommand()</a>
-}
-</h1> 
+ <h1>Заказ № @Model.Order.Id </h1>
 <div class="row">
     <div class="col">
         <div class="input-group ">
@@ -71,6 +65,15 @@
         </div>
     </div>
 </div>
+<br />
+@if (@Model.OrderStatus.Where(x => x.Active).First().GetNextCommand() != null)
+        {
+@* <a class="btn btn-outline-primary" href="Distributor?orderId=@Model.Order.Id&Status=@Model.OrderStatus.Where(x=>x.Active).Select(x=>x.Status).First()" role="button">@Model.OrderStatus.Where(x=>x.Active).First().GetNextCommand()</a> *@
+<button class="ui-button text-end">
+    @Html.ActionLink(@Model.OrderStatus.Where(x=>x.Active).First().GetNextCommand(), "Distributor", "Order", new {orderId=@Model.Order.Id,status=@Model.OrderStatus.Where(x=>x.Active).Select(x=>x.Status).First()})
+</button>
+
+}
 <br />
 <h3>История:</h3>
 <table class="table no-border">
