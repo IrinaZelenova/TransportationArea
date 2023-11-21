@@ -43,9 +43,9 @@ namespace TransportationArea.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> ChangeLoadingPoint(int Id)
+        public IActionResult ChangeLoadingPoint(int Id)
         {
-            var LoadingPoint = await _services.GetLoadingPoints(Id);
+            var LoadingPoint = _services.GetLoadingPoints(Id);
             LoadingPointModel model = new LoadingPointModel()
             {
                 Id=LoadingPoint.Id,

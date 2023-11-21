@@ -176,9 +176,9 @@ namespace TransportationArea.DBProviderService
         }
 
 
-        public async void ChangeLoadingPoints(int Id,string Name, int IdArea)
+        public void ChangeLoadingPoints(int Id,string Name, int IdArea)
         {
-            var loadingPoints =await GetLoadingPoints(Id);
+            var loadingPoints =GetLoadingPoints(Id);
             loadingPoints.Name = Name;
             loadingPoints.Area = GetArea(IdArea);
             _datebase.SaveChanges();
@@ -223,12 +223,12 @@ namespace TransportationArea.DBProviderService
                          .ToListAsync();
         }
 
-        public async Task<LoadingPoints> GetLoadingPoints(int Id)
+        public LoadingPoints GetLoadingPoints(int Id)
         {
-            return await _datebase.LoadingPoints
+            return  _datebase.LoadingPoints
                          .Include(x => x.Area)
                          .Where(x => x.Id == Id)
-                         .FirstAsync();
+                         .First();
         }
 
         public async Task<List<LoadingPoints>> GetLoadingPointsWithoutArea()

@@ -50,10 +50,10 @@ namespace TransportationArea.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(OrderModel model)
+        public IActionResult CreateOrder(OrderModel model)
         {
-            model.Order.SendSity = await _services.GetLoadingPoints(model.Order.SendSity.Id);
-            model.Order.ReceivedSity = await _services.GetLoadingPoints(model.Order.ReceivedSity.Id);
+            model.Order.SendSity =_services.GetLoadingPoints(model.Order.SendSity.Id);
+            model.Order.ReceivedSity = _services.GetLoadingPoints(model.Order.ReceivedSity.Id);
             var newOrder = _services.AddOrder(model.Order); 
             _statusServices.AddOrderStatus(newOrder,OrderStatusName.New,DateTime.Now,DateTime.Now.AddDays(1));
             return RedirectToAction("OrdersDirectory");            
